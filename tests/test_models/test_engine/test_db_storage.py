@@ -97,3 +97,10 @@ class TestDBStorage(unittest.TestCase):
         new_obj = State(name="Test")
         new_obj.save()
         self.assertEqual(models.storage.get("State", new_obj.id), new_obj)
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_count(self):
+        """count returns the total number of objects of a given class"""
+        storage = DBStorage()
+        current_total = len(storage.all())
+        self.assertEqual(storage.count(), current_total)
