@@ -78,12 +78,7 @@ class FileStorage:
             if cls not in classes:
                 return None
             cls = classes[cls]
-        obj = models.storage.all(cls).get("{}.{}".format(cls.__name__, id))
-
-        if obj and isinstance(obj, BaseModel):
-            if hasattr(obj, 'city_id') and isinstance(obj.city_id, int):
-                obj.city_id = str(obj.city_id)
-        return obj
+        return models.storage.all(cls).get("{}.{}".format(cls.__name__, id))
 
     def count(self, cls=None):
         """return number of objects in storage matching the given class.
