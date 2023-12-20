@@ -20,6 +20,7 @@ def teardown(exc):
     """Remove the current session."""
     storage.close()
 
+
 @app.errorhandler(404)
 def not_found(e):
     """Return JSON instead of HTML for HTTP errors."""
