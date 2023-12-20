@@ -79,11 +79,10 @@ class DBStorage:
         """return one object based on class and ID, else None if not found"""
         if cls is None or id is None:
             return None
-        if isinstance(cls, str):
-            if cls not in classes:
-                return None
-            cls = classes[cls]
-        return models.storage.all(cls).get("{}.{}".format(cls.__name__, id))
+        for obj in self.all(cls).values():
+            if id == obj.id:
+                return obj
+        return None
 
     def count(self, cls=None):
         """return number of objects in storage matching the given class.
