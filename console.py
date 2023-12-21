@@ -2,8 +2,8 @@
 """ console """
 
 import cmd
-from datetime import datetime
 import models
+from datetime import datetime
 from models.amenity import Amenity
 from models.base_model import BaseModel
 from models.city import City
@@ -159,6 +159,26 @@ class HBNBCommand(cmd.Cmd):
                 print("** instance id missing **")
         else:
             print("** class doesn't exist **")
+
+    def do_get(self, arg):
+        """Test the get method"""
+        args = shlex.split(arg)
+        if len(args) != 2:
+            print("Usage: get <class_name> <id>")
+            return
+        cls_name, obj_id = args
+        result = models.storage.get(cls_name, obj_id)
+        print(result)
+
+    def do_count(self, arg):
+        """Test the count method"""
+        args = shlex.split(arg)
+        if len(args) > 1:
+            print("Usage: count [<class_name>]")
+            return
+        cls_name = args[0] if args else None
+        result = models.storage.count(cls_name)
+        print(result)
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
