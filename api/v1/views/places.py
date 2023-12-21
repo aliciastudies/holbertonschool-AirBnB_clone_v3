@@ -3,7 +3,7 @@
 
 from flask import jsonify, request, abort, make_response
 from models import storage
-from models.state import State
+from models.place import Place
 from models.city import City
 from models.user import User
 from api.v1.views import app_views
@@ -36,6 +36,7 @@ def get_place(place_id):
                  strict_slashes=False)
 def delete_place(place_id):
     """ Deletes a city object by ID """
+    # Need to fix delete, delete not working**
     place = storage.get(Place, place_id)
     if place is None:
         abort(404)
@@ -44,6 +45,7 @@ def delete_place(place_id):
     return make_response(jsonify({}), 200)
     # 200 status code for success
     # added make_responses
+    
 
 
 @app_views.route('/cities/<city_id>/places', methods=['POST'],
@@ -70,10 +72,11 @@ def create_place(city_id):
     new_place = Place(**data)
     new_place.save()
     return make_response(jsonify(new_place.to_dict()), 201)
+    # updated it from peer suggestion in storing get_json
 
 
-@app_views.route('/place/<city_id>', methods=['PUT'], strict_slashes=False)
-def update_city(city_id):
+@app_views.route('/place/<place_id>', methods=['PUT'], strict_slashes=False)
+def update_place(place_id):
     """ Updates city object """
     place = storage.get(Place, place_id)
     if place is None:
@@ -86,6 +89,6 @@ def update_city(city_id):
     ignore_keys = ['id', 'created_at', 'updated_at']
     for key, value in data.items():
         if key not in ignore_keys:
-            setattr(city, key, value)
+            setattr(place, key, value)
     place.save()
     return make_response(jsonify(place.to_dict()), 200)
