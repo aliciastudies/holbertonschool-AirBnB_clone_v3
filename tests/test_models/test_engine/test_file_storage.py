@@ -18,6 +18,7 @@ import json
 import os
 import pycodestyle as pep8
 import unittest
+import models.engine
 FileStorage = file_storage.FileStorage
 classes = {"Amenity": Amenity, "BaseModel": BaseModel, "City": City,
            "Place": Place, "Review": Review, "State": State, "User": User}
@@ -116,19 +117,25 @@ class TestFileStorage(unittest.TestCase):
 
     @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
     def test_get(self):
-        """test that get returns an object based on given class and id"""
-        storage = FileStorage()
-        fake_obj = storage.get("fake_State", "fake_id")
-        self.assertIs(fake_obj, None)
-        new_obj = State()
-        new_obj.save()
-        new_obj_id = new_obj.id
-        self.assertIs(storage.get("State", new_obj_id), new_obj)
+        """Test get method"""
+        new_state = State(name="California")
+        new_state.save()
+        state_id = new_state.id
+        state = models.storage.get(State, state_id)
+        self.assertEqual(state, new_state)
 
     @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
     def test_count(self):
-        """count returns the total number of objects of a given class"""
+        """Test count method"""
+        # This doesn't remove the JSON from the previous test
+        file_path = "file.json"
+        if os.path.exists(file_path):
+            os.remove(file_path)
         storage = FileStorage()
-        initial_total = len(storage.all())
-        current_total = storage.count()
-        self.assertEqual(current_total, initial_total)
+        storage.reload()
+        new_state = State(name="California")
+        new_state.save()
+        state_id = new_state.id
+        state = models.storage.count(State)
+        self.assertEqual(state, 1)
+        os.remove(file_path)

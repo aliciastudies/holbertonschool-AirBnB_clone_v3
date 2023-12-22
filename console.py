@@ -2,8 +2,8 @@
 """ console """
 
 import cmd
-import models
 from datetime import datetime
+import models
 from models.amenity import Amenity
 from models.base_model import BaseModel
 from models.city import City
@@ -46,10 +46,10 @@ class HBNBCommand(cmd.Cmd):
                 else:
                     try:
                         value = int(value)
-                    except:
+                    except ValueError:
                         try:
                             value = float(value)
-                        except:
+                        except ValueError:
                             continue
                 new_dict[key] = value
         return new_dict
@@ -140,12 +140,12 @@ class HBNBCommand(cmd.Cmd):
                                 if args[2] in integers:
                                     try:
                                         args[3] = int(args[3])
-                                    except:
+                                    except ValueError:
                                         args[3] = 0
                                 elif args[2] in floats:
                                     try:
                                         args[3] = float(args[3])
-                                    except:
+                                    except ValueError:
                                         args[3] = 0.0
                             setattr(models.storage.all()[k], args[2], args[3])
                             models.storage.all()[k].save()
@@ -160,25 +160,6 @@ class HBNBCommand(cmd.Cmd):
         else:
             print("** class doesn't exist **")
 
-    def do_get(self, arg):
-        """Test the get method"""
-        args = shlex.split(arg)
-        if len(args) != 2:
-            print("Usage: get <class_name> <id>")
-            return
-        cls_name, obj_id = args
-        result = models.storage.get(cls_name, obj_id)
-        print(result)
-
-    def do_count(self, arg):
-        """Test the count method"""
-        args = shlex.split(arg)
-        if len(args) > 1:
-            print("Usage: count [<class_name>]")
-            return
-        cls_name = args[0] if args else None
-        result = models.storage.count(cls_name)
-        print(result)
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
