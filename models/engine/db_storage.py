@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 """
 Contains the class DBStorage
+*Update 19/12/2023: added def get(self, cls, id): to retrieve one object
+added def count(self, cls=None): to count the number of objects in storage
 """
 
 import models
@@ -32,16 +34,6 @@ class DBStorage:
         HBNB_MYSQL_HOST = getenv('HBNB_MYSQL_HOST')
         HBNB_MYSQL_DB = getenv('HBNB_MYSQL_DB')
         HBNB_ENV = getenv('HBNB_ENV')
-
-        if HBNB_MYSQL_USER is None:
-            HBNB_MYSQL_USER = 'hbnb_dev'
-        if HBNB_MYSQL_PWD is None:
-            HBNB_MYSQL_PWD = 'hbnb_dev_pwd'
-        if HBNB_MYSQL_HOST is None:
-            HBNB_MYSQL_HOST = 'localhost'
-        if HBNB_MYSQL_DB is None:
-            HBNB_MYSQL_DB = 'hbnb_dev_db'
-
         self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'.
                                       format(HBNB_MYSQL_USER,
                                              HBNB_MYSQL_PWD,
@@ -85,8 +77,10 @@ class DBStorage:
         """call remove() method on the private session attribute"""
         self.__session.remove()
 
+# These two functions are the new methods added into DBStorage class
+# & FileStorage class
     def get(self, cls, id):
-        """Retrieves one object"""
+        """retrieve one object"""
         if cls is None or id is None:
             return None
         objs = self.all(cls)
@@ -96,7 +90,8 @@ class DBStorage:
         return None
 
     def count(self, cls=None):
-        """Retrieves the number of objects in a class"""
+        """count the number of objects in storage"""
         if cls is None:
-            return len(self.all().items())
-        return len(self.all(cls).items())
+            return len(self.all())
+        else:
+            return len(self.all(cls))
