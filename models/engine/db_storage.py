@@ -32,6 +32,16 @@ class DBStorage:
         HBNB_MYSQL_HOST = getenv('HBNB_MYSQL_HOST')
         HBNB_MYSQL_DB = getenv('HBNB_MYSQL_DB')
         HBNB_ENV = getenv('HBNB_ENV')
+
+        if HBNB_MYSQL_USER is None:
+            HBNB_MYSQL_USER = 'hbnb_dev'
+        if HBNB_MYSQL_PWD is None:
+            HBNB_MYSQL_PWD = 'hbnb_dev_pwd'
+        if HBNB_MYSQL_HOST is None:
+            HBNB_MYSQL_HOST = 'localhost'
+        if HBNB_MYSQL_DB is None:
+            HBNB_MYSQL_DB = 'hbnb_dev_db'
+
         self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'.
                                       format(HBNB_MYSQL_USER,
                                              HBNB_MYSQL_PWD,
