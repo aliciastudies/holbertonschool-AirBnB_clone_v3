@@ -55,7 +55,7 @@ class FileStorage:
                 jo = json.load(f)
             for key in jo:
                 self.__objects[key] = classes[jo[key]["__class__"]](**jo[key])
-        except:
+        except IOError:
             pass
 
     def delete(self, obj=None):
@@ -69,17 +69,20 @@ class FileStorage:
         """call reload() method for deserializing the JSON file to objects"""
         self.reload()
 
+# These two functions are the new methods added into DBStorage class
+# & FileStorage class
     def get(self, cls, id):
-        """Retrieves one object"""
-        if cls is not None and id is not None:
-            class_name = cls.__name__
-            for key, value in self.__objects.items():
-                if key == class_name + '.' + id:
+        """A method to retrieve one object"""
+        if cls is None or id is None:
+            return None
+        else:
+            for value in self.all(cls).values():
+                if value.id == id:
                     return value
-        return None
+            return None
 
     def count(self, cls=None):
-        """Retrieves the number of objects in a class"""
+        """A method to count the number of objects in storage"""
         if cls is None:
             return len(self.all())
         else:
