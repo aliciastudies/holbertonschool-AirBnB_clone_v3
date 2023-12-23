@@ -47,7 +47,6 @@ def delete_place(place_id):
     # added make_responses
 
 
-
 @app_views.route('/cities/<city_id>/places', methods=['POST'],
                  strict_slashes=False)
 def create_place(city_id):
@@ -77,9 +76,9 @@ def create_place(city_id):
     # updated it from peer suggestion in storing get_json
 
 
-@app_views.route('/place/<place_id>', methods=['PUT'], strict_slashes=False)
+@app_views.route('/places/<place_id>', methods=['PUT'], strict_slashes=False)
 def update_place(place_id):
-    """ Updates city object """
+    """ Updates place object """
     place = storage.get(Place, place_id)
     if place is None:
         abort(404)
