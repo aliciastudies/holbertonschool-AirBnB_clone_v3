@@ -87,7 +87,8 @@ def update_place(place_id):
     if not data:
         abort(400, description="Not a JSON")
 
-    ignore_keys = ['id', 'created_at', 'updated_at']
+    ignore_keys = ['id', 'created_at', 'updated_at', 'user_id', 'city_id']
+    # was missing user and city ids
     for key, value in data.items():
         if key not in ignore_keys:
             setattr(place, key, value)
