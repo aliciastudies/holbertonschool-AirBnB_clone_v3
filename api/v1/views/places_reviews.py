@@ -9,7 +9,7 @@ from models.review import Review
 from api.v1.views import app_views
 
 
-@app_views.route('places/<place_id>/reviews', methods=['GET'],
+@app_views.route('/places/<place_id>/reviews', methods=['GET'],
                  strict_slashes=False)
 def get_reviews(place_id):
     """ Retrieves list of all review objects """
