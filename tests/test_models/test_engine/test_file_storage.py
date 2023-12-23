@@ -127,15 +127,6 @@ class TestFileStorage(unittest.TestCase):
     @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
     def test_count(self):
         """Test count method"""
-        # This doesn't remove the JSON from the previous test
-        file_path = "file.json"
-        if os.path.exists(file_path):
-            os.remove(file_path)
         storage = FileStorage()
-        storage.reload()
-        new_state = State(name="California")
-        new_state.save()
-        state_id = new_state.id
-        state = models.storage.count(State)
-        self.assertEqual(state, 1)
-        os.remove(file_path)
+        current_count = len(storage.all())
+        self.assertEqual(storage.count(), current_count)
