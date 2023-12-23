@@ -3,7 +3,6 @@
 from flask import jsonify, request, abort, make_response
 from models import storage
 from models.place import Place
-from models.city import City
 from models.user import User
 from models.review import Review
 from api.v1.views import app_views
@@ -16,7 +15,7 @@ def get_reviews(place_id):
     place = storage.get(Place, place_id)
     if place is None:
         abort(404)
-    reviews_list = places.reviews
+    reviews_list = place.reviews
     review_dict = []
     for review in reviews_list:
         review_dict.append(review.to_dict())
