@@ -70,6 +70,8 @@ def create_place(city_id):
     if user_obj is None:
         abort(404)
     new_place = Place(**data)
+    new_place.city_id = city_id
+    # set city_id to connect new_place with the city
     new_place.save()
     return make_response(jsonify(new_place.to_dict()), 201)
     # updated it from peer suggestion in storing get_json
@@ -81,11 +83,10 @@ def update_place(place_id):
     place = storage.get(Place, place_id)
     if place is None:
         abort(404)
-
-    if not request.json:
+    data = request.get_json()
+    if not data:
         abort(400, description="Not a JSON")
 
-    data = request.get_json()
     ignore_keys = ['id', 'created_at', 'updated_at']
     for key, value in data.items():
         if key not in ignore_keys:
